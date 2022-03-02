@@ -1,0 +1,9 @@
+{
+    //compound rewards into star pool
+    account : 'xx' //account address
+    privateKey : 'xx' //your wallet private key
+    daysToCompound : 1 //how many days between compound
+    CompoundTimeHour : 22 //hour to compound 24hr formate
+    CompoundTimeMins : 20 // mins to compound
+    minCompound: 0.5 //the minimum amount of star required to perform a compound
+}

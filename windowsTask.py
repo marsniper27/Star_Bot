@@ -10,7 +10,7 @@ print(locate_python)
 with open('config.hjson', 'r') as f:
     config = hjson.load(f)
 
-daysToClaim = config["daysToClaim"]
+daysToCompound = config["daysToCompound"]
 
 location = os.path.dirname(os.path.abspath(__file__))
 
@@ -21,7 +21,7 @@ def createSchedule():
     task_def = scheduler.NewTask(0)
 
     # Create trigger
-    start_time = datetime.datetime.now() + datetime.timedelta(days=daysToClaim)
+    start_time = datetime.datetime.now() + datetime.timedelta(days=daysToCompound)
     TASK_TRIGGER_TIME = 1
     trigger = task_def.Triggers.Create(TASK_TRIGGER_TIME)
     trigger.StartBoundary = start_time.isoformat()
@@ -31,10 +31,10 @@ def createSchedule():
     action = task_def.Actions.Create(TASK_ACTION_EXEC)
     action.ID = 'DO NOTHING'
     action.Path = locate_python+'\python.exe'
-    action.Arguments = location + "\ClaimBot.py"
+    action.Arguments = location + "\Star_Bot.py"
 
     # Set parameters
-    task_def.RegistrationInfo.Description = 'Claim HNR'
+    task_def.RegistrationInfo.Description = 'Compound Star'
     task_def.Settings.Enabled = True
     task_def.Settings.StopIfGoingOnBatteries = False
 
@@ -43,7 +43,7 @@ def createSchedule():
     TASK_CREATE_OR_UPDATE = 6
     TASK_LOGON_NONE = 0
     root_folder.RegisterTaskDefinition(
-        'claim HNR',  # Task name
+        'Compound Star',  # Task name
         task_def,
         TASK_CREATE_OR_UPDATE,
         '',  # No user

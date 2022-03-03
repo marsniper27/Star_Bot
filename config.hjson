@@ -6,4 +6,5 @@
     CompoundTimeHour : 22 //hour to compound 24hr formate
     CompoundTimeMins : 20 // mins to compound
     minCompound: 0.5 //the minimum amount of star required to perform a compound
+    scheduleClaim: true //set weather to create a scheduled task to claim ever daysToCompound
 }

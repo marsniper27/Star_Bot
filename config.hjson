@@ -1,0 +1,26 @@
+{
+    //compound rewards into star pool
+    account : 'xx' //account address
+    privateKey : 'xx' //your wallet private key
+    daysToCompound : 1 //how many days between compound
+    CompoundTimeHour : 22 //hour to compound 24hr formate
+    CompoundTimeMins : 20 // mins to compound
+    minCompound: 0.5 //the minimum amount of star required to perform a compound
+    scheduleClaim: true //set weather to create a scheduled task to claim ever daysToCompound//list of the pools you wish the bot to compound.
+    poolsToCompound: [2,6]
+}
+/*  Pool ids
+        STAR - WMATIC   pid:0
+        STAR - ETH      pid:1
+        STAR - DHV      pid:2
+        STAR - MAI      pid:3
+        STAR-WBTC       pid:4
+        WBTC            pid:5
+        STAR            pid:6
+        WETH            pid:7
+        DHV             pid:9
+        DAO             pid:10
+        STAR - DAO      pid:11
+        DAO - ABUND     pid:12
+        ABUND           pid:13
+*/

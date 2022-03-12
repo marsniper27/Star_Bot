@@ -15,9 +15,10 @@ with open('config.hjson', 'r') as f:
 account = config["account"]
 privateKey = config["privateKey"]
 daysToCompound = config["daysToCompound"]
-compoundTimeHour = config["compoundTimeHour"]
-compoundTimeMins = config["compoundTimeMins"]
+compoundTimeHour = config["CompoundTimeHour"]
+compoundTimeMins = config["CompoundTimeMins"]
 minCompound = config["minCompound"]
+poolsToCompound = config["poolsToCompound"]
 
 w3 = Web3(Web3.HTTPProvider('https://polygon-rpc.com/'))
 with open('starMasterchefABI.json', 'r') as f:
@@ -27,28 +28,31 @@ starMasterchefAddress = '0x16E76500f1E6C943FEd150bF56403d91A91dCD55'
 starMasterchefContract = w3.eth.contract(address=starMasterchefAddress ,abi=starMasterchefAbi)
 
 async def collectRewards():
-    global nodes
-    global balance
-    blocktime = w3.eth.get_block('latest')
-    blocktime = blocktime.timestamp
     gasPrice = w3.eth.gasPrice
 
-    pendingStar = starMasterchefContract.functions.pendingStar(6,account).call()
-    
-    if(pendingStar >= minCompound):
-        print("collecting reward")
-        tx = starMasterchefContract.functions.compound(6).buildTransaction({'nonce': w3.eth.getTransactionCount(account), "from": account, "gasPrice":gasPrice})
-        signed_tx = w3.eth.account.signTransaction(tx, private_key=privateKey)
-        raw_tx = w3.eth.sendRawTransaction(signed_tx.rawTransaction)
+    for pid in poolsToCompound:
+        if(starMasterchefContract.functions.canHarvest(pid,account).call()):
 
-        if(config["scheduleClaim"] == True):
-            match os:
-                case "Windows":
-                    windowsTask.createSchedule()
-                case "Linux":
-                    print("need to implement Linux task scheduling")
-                case "Darwin":
-                    print("need to implement MacOs task scheduling")
+            pendingStar = starMasterchefContract.functions.pendingStar(pid,account).call()
+            
+            if(pendingStar >= minCompound*10**18):
+                print("collecting reward")
+                tx = starMasterchefContract.functions.compound(6).buildTransaction({'nonce': w3.eth.getTransactionCount(account), "from": account, "gasPrice":gasPrice})
+                signed_tx = w3.eth.account.signTransaction(tx, private_key=privateKey)
+                raw_tx = w3.eth.sendRawTransaction(signed_tx.rawTransaction)
+
+                print("compounded: ",pid)
+        else:
+            print("can't harvest: ",pid)
+
+    if(config["scheduleClaim"] == True):
+        match os:
+            case "Windows":
+                windowsTask.createSchedule()
+            case "Linux":
+                print("need to implement Linux task scheduling")
+            case "Darwin":
+                print("need to implement MacOs task scheduling")
         
 
 async def checkTime():

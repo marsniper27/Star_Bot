@@ -22,16 +22,18 @@ def createSchedule():
 
     # Create trigger
     start_time = datetime.datetime.now() + datetime.timedelta(days=daysToCompound)
-    TASK_TRIGGER_TIME = 1
+    TASK_TRIGGER_TIME = 2
     trigger = task_def.Triggers.Create(TASK_TRIGGER_TIME)
     trigger.StartBoundary = start_time.isoformat()
+    trigger.DaysInterval = daysToCompound
 
     # Create action
     TASK_ACTION_EXEC = 0
     action = task_def.Actions.Create(TASK_ACTION_EXEC)
     action.ID = 'DO NOTHING'
     action.Path = locate_python+'\python.exe'
-    action.Arguments = location + "\Star_Bot.py"
+    action.Arguments = "Star_Bot.py"
+    action.WorkingDirectory = location
 
     # Set parameters
     task_def.RegistrationInfo.Description = 'Compound Star'

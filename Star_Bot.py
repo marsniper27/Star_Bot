@@ -7,7 +7,6 @@ import windowsTask
 from web3 import Web3
 from datetime import datetime
 os = platform.system()
-print(os)
 
 with open('config.hjson', 'r') as f:
     config = hjson.load(f)
@@ -32,9 +31,9 @@ async def collectRewards():
 
     for pid in poolsToCompound:
         if(starMasterchefContract.functions.canHarvest(pid,account).call()):
-
             pendingStar = starMasterchefContract.functions.pendingStar(pid,account).call()
-            
+            print('Pendding Star',pendingStar/(10**18))
+
             if(pendingStar >= minCompound*10**18):
                 print("collecting reward")
                 tx = starMasterchefContract.functions.compound(6).buildTransaction({'nonce': w3.eth.getTransactionCount(account), "from": account, "gasPrice":gasPrice})
